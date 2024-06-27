@@ -241,6 +241,12 @@ class Prover:
         # reference: https://github.com/sec-bit/learning-zkp/blob/master/plonk-intro-cn/4-plonk-constraints.md
         gate_constraints_coeff = (
             # TODO: your code
+            QL_coeff*A_coeff + 
+            QR_coeff*B_coeff + 
+            QM_coeff*A_coeff*B_coeff +
+            QO_coeff*C_coeff + 
+            QC_coeff + 
+            PI_coeff
         )
 
         normal_roots = Polynomial(
@@ -269,6 +275,15 @@ class Prover:
         # reference: https://github.com/sec-bit/learning-zkp/blob/master/plonk-intro-cn/3-plonk-permutation.md
         permutation_grand_product_coeff = (
             # TODO: your code
+            # Polynomial算数符号重载了要放前面 
+            Z_coeff * (
+            self.rlc(A_coeff, roots_coeff) * 
+            self.rlc(B_coeff, roots_coeff*Scalar(2)) * 
+            self.rlc(C_coeff, roots_coeff*Scalar(3)) )
+            - ZW_coeff *( 
+            self.rlc(A_coeff, S1_coeff) * 
+            self.rlc(B_coeff, S2_coeff) * 
+            self.rlc(C_coeff, S3_coeff) )
         )
 
         permutation_first_row_coeff = (Z_coeff - Scalar(1)) * L0_coeff
